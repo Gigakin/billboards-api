@@ -1,0 +1,2 @@
+// Strings
+module.exports = {}
