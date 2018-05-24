@@ -1,0 +1,25 @@
+{
+  "name": "billboards-api",
+  "version": "1.0.0-beta",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/itsag/billboards-api.git"
+  },
+  "author": {
+    "name": "Ajay Gupta",
+    "email": "ajay.gupta8308@gmail.com",
+    "url": "https://ajaygupta.me"
+  },
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon index.js",
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "express": "^4.16.2"
+  },
+  "devDependencies": {
+    "eslint": "^4.16.0",
+    "nodemon": "^1.14.11"
+  }
+}

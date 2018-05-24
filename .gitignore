@@ -1,0 +1,13 @@
+# Builds
+[Bb]uild
+[Dd]ist
+[Oo]out
+[Rr]elease
+
+# Packagers
+/node_modules
+
+# IDEs
+/.vs
+/.vscode
+/.idea
