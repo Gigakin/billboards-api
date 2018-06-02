@@ -9,7 +9,7 @@ const constants = require("./app/constants");
 
 // Configure Database Connection
 const connection = mysql.createConnection({
-  host: constants.DB.HOSTNAME,
+  host: constants.DB.HOST,
   user: constants.DB.USER,
   password: constants.DB.PASSWORD,
   database: constants.DB.DBNAME

@@ -1,9 +1,9 @@
 // Constants
 module.exports = {
   DB: {
-    HOST: process.env.DB_HOST || "localhost",
-    USER: process.env.DB_USER || "root",
-    PASSWORD: process.env.DB_PASSWORD || "password",
-    DBNAME: process.env.DB_NAME || "lk-billboards"
+    HOST: process.env.LK_BB_DB_HOST,
+    USER: process.env.LK_BB_DB_USER,
+    PASSWORD: process.env.LK_BB_DB_PASSWORD,
+    DBNAME: process.env.LK_BB_DB_NAME
   }
 };
