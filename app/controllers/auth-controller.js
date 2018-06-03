@@ -1,5 +1,9 @@
+// Modules
+const jwt = require("jsonwebtoken");
+
 // Imports
 const Strings = require("../strings");
+const Constants = require("../constants");
 
 // Set Database Instance
 let database = null;
@@ -28,8 +32,24 @@ let login = (request, response) => {
             message: Strings.ERRORS.WRONG_PASSWORD
           });
         }
+
+        // Create JWT
+        let token = jwt.sign(
+          // User details
+          { id: users[0].id },
+          // Signing Key
+          Constants.JWT.SECRET_KEY,
+          // Token Details
+          { expiresIn: 3600 * 24 }
+        );
+
         // Return user details
-        return response.send(users[0]);
+        return response.json({
+          expiresIn: 3600 * 24,
+          access_token: token,
+          refresh_token: null,
+          user: users[0]
+        });
       }
       return response.status(404).json({
         message: Strings.ERRORS.USER_NOT_FOUND

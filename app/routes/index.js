@@ -2,6 +2,6 @@
 const authRoutes = require("./auth-routes");
 
 // Exports
-module.exports = (app, dbInstance) => {
+module.exports = (app, securedRoutes, dbInstance) => {
   authRoutes(app, dbInstance);
 };

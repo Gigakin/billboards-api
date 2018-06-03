@@ -16,6 +16,10 @@ const connection = mysql.createConnection({
   database: constants.DB.DBNAME
 });
 
+// Authenticated Routing
+const securedRoutes = express.Router();
+app.use("/api", securedRoutes);
+
 // Parsing
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
@@ -29,10 +33,10 @@ connection.connect(error => {
   app.use(cors);
 
   // Middlewares
-  require("./app/middlewares")(app, connection);
+  require("./app/middlewares")(app, securedRoutes, connection);
 
   // Routes
-  require("./app/routes")(app, connection);
+  require("./app/routes")(app, securedRoutes, connection);
 
   // Start Server
   app.listen(serverPort, () => {
