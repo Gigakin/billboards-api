@@ -1,5 +1,6 @@
 // Modules
 const express = require("express");
+const bodyParser = require("body-parser");
 const mysql = require("mysql");
 const app = express();
 
@@ -15,9 +16,16 @@ const connection = mysql.createConnection({
   database: constants.DB.DBNAME
 });
 
+// Parsing
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
+
 // Establish connection with database
 connection.connect(error => {
   if (error) return console.log(error);
+
+  // Routes
+  require("./app/routes")(app, connection);
 
   // Start Server
   app.listen(serverPort, () => {
