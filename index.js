@@ -24,6 +24,9 @@ app.use(bodyParser.json());
 connection.connect(error => {
   if (error) return console.log(error);
 
+  // Middlewares
+  require("./app/middlewares")(app, connection);
+
   // Routes
   require("./app/routes")(app, connection);
 

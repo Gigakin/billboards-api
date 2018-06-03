@@ -24,6 +24,19 @@ create table if not exists user_roles (
 
 
 --
+-- Table: Audits
+-- Contains information about audited requests
+--
+create table if not exists audits (
+  id int(10) primary key auto_increment,
+  userid int(10) default null,
+  method varchar(32) default null,
+  resource_url varchar(255) default null,
+  host_url varchar(255) default null
+) Engine=InnoDB;
+
+
+--
 -- Table: Orders
 -- Contains information about orders
 --
