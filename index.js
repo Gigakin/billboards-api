@@ -24,6 +24,10 @@ app.use(bodyParser.json());
 connection.connect(error => {
   if (error) return console.log(error);
 
+  // CORS Configuration
+  const cors = require("./app/cors");
+  app.use(cors);
+
   // Middlewares
   require("./app/middlewares")(app, connection);
 
