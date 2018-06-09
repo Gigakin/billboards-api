@@ -43,17 +43,34 @@ let login = (request, response) => {
           { expiresIn: 3600 * 24 }
         );
 
-        // Return user details
-        return response.json({
-          expiresIn: 3600 * 24,
-          access_token: token,
-          refresh_token: null,
-          user: users[0]
+        // Get User Role
+        database.query(
+          `SELECT * FROM user_roles WHERE id="${users[0].role}"`,
+          (error, userrole) => {
+            if (error) return response.sendStatus(500);
+
+            if (userrole) {
+              // Update user role
+              users[0].role = userrole[0].role;
+
+              // Return user details
+              return response.json({
+                expiresIn: 3600 * 24,
+                access_token: token,
+                refresh_token: null,
+                user: users[0]
+              });
+            } else {
+              // Internal Server Error
+              return response.sendStatus(500);
+            }
+          }
+        );
+      } else {
+        return response.status(404).json({
+          message: Strings.ERRORS.USER_NOT_FOUND
         });
       }
-      return response.status(404).json({
-        message: Strings.ERRORS.USER_NOT_FOUND
-      });
     }
   );
 };
