@@ -11,6 +11,7 @@ let authorizationCheck = (request, response, next) => {
 
   // Validate
   if (!headers.authorization) return response.sendStatus(401);
+
   // Verify Token
   jwt.verify(headers.authorization, Constants.JWT.SECRET_KEY, error => {
     if (error) {
@@ -18,7 +19,6 @@ let authorizationCheck = (request, response, next) => {
         message: Strings.ERRORS.INVALID_TOKEN
       });
     }
-    // Continue
     return next();
   });
 };

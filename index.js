@@ -8,6 +8,10 @@ const app = express();
 const serverPort = process.env.PORT || 8000;
 const constants = require("./app/constants");
 
+// CORS Configuration
+const cors = require("./app/cors");
+app.use(cors);
+
 // Configure Database Connection
 const connection = mysql.createConnection({
   host: constants.DB.HOST,
