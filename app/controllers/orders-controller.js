@@ -12,7 +12,30 @@ let setDbInstance = instance => {
 let getAllOrders = (request, response) => {
   database.query(`SELECT * FROM orders`, (error, orders) => {
     if (error) return response.sendStatus(500);
-    return response.json(orders);
+    let counter = 1;
+    let modifiedOrders = [];
+    orders.forEach(order => {
+      database.query(
+        `SELECT * FROM account_owners WHERE id=${order.owner};
+         SELECT * FROM parties WHERE id=${order.party};
+         SELECT * FROM order_statuses WHERE id=${order.status}
+         `,
+        [0, 1, 2],
+        (error, result) => {
+          if (error) return response.sendStatus(500);
+          // Append properties
+          order.owner = result[0][0];
+          order.party = result[1][0];
+          order.status = result[2][0];
+          // Push to modified orders
+          modifiedOrders.push(order);
+          // Send response if all orders have been modified
+          if (orders.length === counter) return response.json(orders);
+          // otherwise increment the counter and loop
+          counter++;
+        }
+      );
+    });
   });
 };
 

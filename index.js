@@ -17,7 +17,8 @@ const connection = mysql.createConnection({
   host: constants.DB.HOST,
   user: constants.DB.USER,
   password: constants.DB.PASSWORD,
-  database: constants.DB.DBNAME
+  database: constants.DB.DBNAME,
+  multipleStatements: true
 });
 
 // Authenticated Routing
