@@ -42,7 +42,7 @@ let getAllOrders = (request, response) => {
 // Get Order By ID
 let getOrderById = (request, response) => {
   database.query(
-    `SELECT * FROM orders WHERE id="${request.params.orderid}"`,
+    `SELECT * FROM orders WHERE id="${request.params.id}"`,
     (error, orders) => {
       if (error) return response.sendStatus(500);
       return response.json(orders[0]);
@@ -71,10 +71,7 @@ let createOrder = (request, response) => {
   database.query(
     `INSERT INTO orders (name, description, owner, party) VALUES (${dbValues})`,
     error => {
-      if (error) {
-        console.log(error);
-        return response.sendStatus(500);
-      }
+      if (error) return response.sendStatus(500);
       return response.json({
         message: Strings.SUCCESS.ORDER_CREATED
       });
@@ -82,10 +79,20 @@ let createOrder = (request, response) => {
   );
 };
 
+// Delete Order
+let deleteOrder = (request, response) => {
+  let orderId = request.params.id;
+  database.query(`DELETE FROM orders WHERE id=${orderId}`, (error, result) => {
+    if (error) return response.sendStatus(500);
+    return response.json({ message: Strings.SUCCESS.ORDER_DELETED });
+  });
+};
+
 // Exports
 module.exports = {
   setDbInstance: setDbInstance,
   getAllOrders: getAllOrders,
   getOrderById: getOrderById,
-  createOrder: createOrder
+  createOrder: createOrder,
+  deleteOrder: deleteOrder
 };

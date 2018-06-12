@@ -6,6 +6,7 @@ module.exports = {
     WRONG_PASSWORD: "Wrong password."
   },
   SUCCESS: {
-    ORDER_CREATED: "Order created!"
+    ORDER_CREATED: "Order created!",
+    ORDER_DELETED: "Order deleted!"
   }
 };

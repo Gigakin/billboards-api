@@ -5,6 +5,7 @@ const ordersController = require("../controllers/orders-controller");
 module.exports = (app, dbInstance) => {
   ordersController.setDbInstance(dbInstance);
   app.get("/api/orders", ordersController.getAllOrders);
-  app.get("/api/orders/:orderid", ordersController.getOrderById);
+  app.get("/api/orders/:id", ordersController.getOrderById);
   app.post("/api/orders", ordersController.createOrder);
+  app.delete("/api/orders/:id", ordersController.deleteOrder);
 };
