@@ -45,7 +45,30 @@ let getOrderById = (request, response) => {
     `SELECT * FROM orders WHERE id="${request.params.id}"`,
     (error, orders) => {
       if (error) return response.sendStatus(500);
-      return response.json(orders[0]);
+      if (orders && orders.length) {
+        let order = orders[0];
+        database.query(
+          `
+          SELECT * FROM account_owners WHERE id=${order.owner};
+          SELECT * FROM parties WHERE id=${order.party};
+          SELECT * FROM order_statuses WHERE id=${order.status};
+        `,
+          [0, 1, 2],
+          (error, result) => {
+            if (error) return response.sendStatus(500);
+            // Append Properties
+            order.owner = result[0][0];
+            order.party = result[1][0];
+            order.status = result[2][0];
+            // Send response
+            response.json(order);
+          }
+        );
+      } else {
+        response.status(404).json({
+          message: Strings.ERRORS.ORDER_NOT_FOUND
+        });
+      }
     }
   );
 };
