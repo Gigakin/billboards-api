@@ -12,8 +12,17 @@ let getJobTypes = (request, response) => {
   });
 };
 
+// Get Job Qualities
+let getJobQualities = (request, response) => {
+  database.query(`SELECT * FROM job_qualities`, (error, qualities) => {
+    if (error) return response.sendStatus(500);
+    return response.json(qualities);
+  });
+};
+
 // Exports
 module.exports = {
   setDbInstance: setDbInstance,
-  getJobTypes: getJobTypes
+  getJobTypes: getJobTypes,
+  getJobQualities: getJobQualities
 };

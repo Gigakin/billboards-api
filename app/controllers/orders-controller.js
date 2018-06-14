@@ -119,7 +119,21 @@ let addJobs = (request, response) => {
       message: Strings.ERRORS.MISSING_REQUIRED_FIELDS
     });
   }
-  response.sendStatus(201);
+
+  let dbValues = [];
+
+  request.body.forEach((job, index) => {
+    dbValues.push([
+      parseInt(job.type, 10),
+      parseInt(job.quality, 10),
+      parseInt(job.sizeUnits, 10),
+      parseFloat(job.sizeWidth),
+      parseFloat(job.sizeHeight),
+      parseInt(job.quantity)
+    ]);
+  });
+
+  response.send(dbValues);
 };
 
 // Exports
