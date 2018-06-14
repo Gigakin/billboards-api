@@ -20,9 +20,18 @@ let getJobQualities = (request, response) => {
   });
 };
 
+// Get Units of Measurements
+let getUnitsOfMeasurements = (request, response) => {
+  database.query(`SELECT * FROM uom`, (error, units) => {
+    if (error) return response.sendStatus(500);
+    return response.json(units);
+  });
+};
+
 // Exports
 module.exports = {
   setDbInstance: setDbInstance,
   getJobTypes: getJobTypes,
-  getJobQualities: getJobQualities
+  getJobQualities: getJobQualities,
+  getUnitsOfMeasurements: getUnitsOfMeasurements
 };
