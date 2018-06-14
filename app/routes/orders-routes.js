@@ -8,4 +8,5 @@ module.exports = (app, dbInstance) => {
   app.get("/api/orders/:id", ordersController.getOrderById);
   app.post("/api/orders", ordersController.createOrder);
   app.delete("/api/orders/:id", ordersController.deleteOrder);
+  app.post("/api/orders/:id/jobs", ordersController.addJobs);
 };

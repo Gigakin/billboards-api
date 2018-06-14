@@ -95,7 +95,7 @@ let createOrder = (request, response) => {
     `INSERT INTO orders (name, description, owner, party) VALUES (${dbValues})`,
     error => {
       if (error) return response.sendStatus(500);
-      return response.json({
+      return response.status(201).json({
         message: Strings.SUCCESS.ORDER_CREATED
       });
     }
@@ -111,11 +111,23 @@ let deleteOrder = (request, response) => {
   });
 };
 
+// Add Jobs
+let addJobs = (request, response) => {
+  // Validate
+  if (!request.body) {
+    return response.status(400).json({
+      message: Strings.ERRORS.MISSING_REQUIRED_FIELDS
+    });
+  }
+  response.sendStatus(201);
+};
+
 // Exports
 module.exports = {
   setDbInstance: setDbInstance,
   getAllOrders: getAllOrders,
   getOrderById: getOrderById,
   createOrder: createOrder,
-  deleteOrder: deleteOrder
+  deleteOrder: deleteOrder,
+  addJobs: addJobs
 };
