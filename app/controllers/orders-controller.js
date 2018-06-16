@@ -120,20 +120,52 @@ let addJobs = (request, response) => {
     });
   }
 
-  let dbValues = [];
+  // Extract Order ID
+  let orderId = request.params.id;
+  let counter = 1;
 
-  request.body.forEach((job, index) => {
-    dbValues.push([
-      parseInt(job.type, 10),
-      parseInt(job.quality, 10),
-      parseInt(job.sizeUnits, 10),
-      parseFloat(job.sizeWidth),
-      parseFloat(job.sizeHeight),
-      parseInt(job.quantity)
-    ]);
-  });
+  // Check if Order exists
+  database.query(
+    `SELECT * FROM orders WHERE id=${orderId}`,
+    (error, result) => {
+      if (error) return response.sendStatus(500);
+      if (result && result.length === 0) {
+        return response.status(404).json({
+          message: Strings.ERRORS.ORDER_NOT_FOUND
+        });
+      }
 
-  response.send(dbValues);
+      request.body.forEach(job => {
+        let values = [
+          parseInt(orderId),
+          parseInt(job.quality),
+          parseInt(job.quantity),
+          parseInt(job.sizeUnits),
+          parseInt(job.sizeWidth),
+          parseInt(job.sizeHeight),
+          parseInt(job.type),
+          job.isHighPriority,
+          `"${job.notes}"`
+        ];
+
+        // Insert into database
+        database.query(
+          `INSERT INTO jobs (order_id, quality, quantity, size_units, size_width, size_height, type, is_high_priority, notes) VALUES (${values})`,
+          error => {
+            if (error) return response.sendStatus(500);
+            // Send response if all jobs have been inserted
+            if (counter === request.body.length) {
+              return response.json({
+                message: Strings.SUCCESS.JOBS_ADDED
+              });
+            }
+            // otherise increment counter and loop
+            counter++;
+          }
+        );
+      });
+    }
+  );
 };
 
 // Exports
