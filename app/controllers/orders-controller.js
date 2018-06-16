@@ -85,6 +85,11 @@ let getOrderById = (request, response) => {
               order.isHighPriority = false;
             } else {
               result[3].forEach(job => {
+                // Append new properties to jobs
+                job.sizeWidth = job.size_width;
+                job.sizeHeight = job.size_height;
+                job.sizeUnits = job.size_units;
+
                 if (job.is_high_priority) {
                   order.isHighPriority = true;
                   return;
