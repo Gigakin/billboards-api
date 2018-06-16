@@ -37,7 +37,7 @@ let getAllOrders = (request, response) => {
           } else {
             result[3].forEach(job => {
               if (job.is_high_priority) {
-                order.is_high_priority = true;
+                order.isHighPriority = true;
                 return;
               }
             });
