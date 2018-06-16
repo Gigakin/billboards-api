@@ -18,19 +18,35 @@ let getAllOrders = (request, response) => {
       database.query(
         `SELECT * FROM account_owners WHERE id=${order.owner};
          SELECT * FROM parties WHERE id=${order.party};
-         SELECT * FROM order_statuses WHERE id=${order.status}
+         SELECT * FROM order_statuses WHERE id=${order.status};
+         SELECT * FROM jobs WHERE order_id=${order.id}
          `,
-        [0, 1, 2],
+        [0, 1, 2, 3],
         (error, result) => {
           if (error) return response.sendStatus(500);
+
           // Append properties
           order.owner = result[0][0];
           order.party = result[1][0];
           order.status = result[2][0];
+          order.isHighPriority = false;
+
+          // Set High Priority Flag
+          if (result[3].length === 0) {
+            order.isHighPriority = false;
+          } else {
+            result[3].forEach(job => {
+              if (job.is_high_priority) {
+                order.is_high_priority = true;
+                return;
+              }
+            });
+          }
+
           // Push to modified orders
           modifiedOrders.push(order);
           // Send response if all orders have been modified
-          if (orders.length === counter) return response.json(orders);
+          if (orders.length === counter) return response.json(modifiedOrders);
           // otherwise increment the counter and loop
           counter++;
         }
