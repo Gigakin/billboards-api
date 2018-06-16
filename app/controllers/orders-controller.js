@@ -68,14 +68,29 @@ let getOrderById = (request, response) => {
           SELECT * FROM account_owners WHERE id=${order.owner};
           SELECT * FROM parties WHERE id=${order.party};
           SELECT * FROM order_statuses WHERE id=${order.status};
+          SELECT * FROM jobs WHERE order_id=${order.id}
         `,
-          [0, 1, 2],
+          [0, 1, 2, 3],
           (error, result) => {
             if (error) return response.sendStatus(500);
             // Append Properties
             order.owner = result[0][0];
             order.party = result[1][0];
             order.status = result[2][0];
+            order.jobs = result[3];
+            order.isHighPriority = false;
+
+            // Set High Priority Flag
+            if (result[3].length === 0) {
+              order.isHighPriority = false;
+            } else {
+              result[3].forEach(job => {
+                if (job.is_high_priority) {
+                  order.isHighPriority = true;
+                  return;
+                }
+              });
+            }
             // Send response
             response.json(order);
           }
