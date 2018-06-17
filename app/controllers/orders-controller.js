@@ -183,12 +183,13 @@ let addJobs = (request, response) => {
           parseInt(job.sizeHeight),
           parseInt(job.type),
           job.isHighPriority,
-          `"${job.notes}"`
+          `"${job.notes}"`,
+          `"${job.delivery_expected_by}"`
         ];
 
         // Insert into database
         database.query(
-          `INSERT INTO jobs (order_id, quality, quantity, size_units, size_width, size_height, type, is_high_priority, notes) VALUES (${values})`,
+          `INSERT INTO jobs (order_id, quality, quantity, size_units, size_width, size_height, type, is_high_priority, notes, delivery_expected_by) VALUES (${values})`,
           error => {
             if (error) return response.sendStatus(500);
             // Send response if all jobs have been inserted
