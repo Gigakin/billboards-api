@@ -125,10 +125,12 @@ let createOrder = (request, response) => {
     `"${body.name}"`,
     `"${body.description}"`,
     `"${body.owner}"`,
-    `"${body.party}"`
+    `"${body.party}"`,
+    body.is_designing,
+    body.is_scanning
   ];
   database.query(
-    `INSERT INTO orders (name, description, owner, party) VALUES (${dbValues})`,
+    `INSERT INTO orders (name, description, owner, party, is_designing, is_scanning) VALUES (${dbValues})`,
     error => {
       if (error) return response.sendStatus(500);
       return response.status(201).json({
