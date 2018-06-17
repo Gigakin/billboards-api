@@ -9,6 +9,7 @@ module.exports = {
   SUCCESS: {
     ORDER_CREATED: "Order created!",
     ORDER_DELETED: "Order deleted!",
-    JOBS_ADDED: "Job(s) were added to the order"
+    JOBS_ADDED: "Job(s) were added to the order",
+    JOB_REMOVED: "Job removed"
   }
 };

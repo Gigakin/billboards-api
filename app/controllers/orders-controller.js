@@ -207,6 +207,22 @@ let addJobs = (request, response) => {
   );
 };
 
+// Remove Job
+let removeJob = (request, response) => {
+  let orderId = request.params.orderid;
+  let jobId = request.params.jobid;
+  // Remove from Database
+  database.query(
+    `DELETE FROM jobs WHERE order_id=${orderId} AND id=${jobId}`,
+    error => {
+      if (error) return response.sendStatus(500);
+      return response.json({
+        message: Strings.SUCCESS.JOB_REMOVED
+      });
+    }
+  );
+};
+
 // Exports
 module.exports = {
   setDbInstance: setDbInstance,
@@ -214,5 +230,6 @@ module.exports = {
   getOrderById: getOrderById,
   createOrder: createOrder,
   deleteOrder: deleteOrder,
-  addJobs: addJobs
+  addJobs: addJobs,
+  removeJob: removeJob
 };
