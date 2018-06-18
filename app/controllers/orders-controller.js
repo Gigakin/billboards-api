@@ -143,9 +143,17 @@ let createOrder = (request, response) => {
 // Delete Order
 let deleteOrder = (request, response) => {
   let orderId = request.params.id;
-  database.query(`DELETE FROM orders WHERE id=${orderId}`, (error, result) => {
+
+  // Delete Jobs in the order
+  database.query(`DELETE FROM jobs WHERE order_id=${orderId}`, error => {
     if (error) return response.sendStatus(500);
-    return response.json({ message: Strings.SUCCESS.ORDER_DELETED });
+    // Delete order
+    database.query(`DELETE FROM orders WHERE id=${orderId}`, error => {
+      if (error) return response.sendStatus(500);
+      return response.json({
+        message: Strings.SUCCESS.ORDER_DELETED
+      });
+    });
   });
 };
 
