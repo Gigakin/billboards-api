@@ -3,16 +3,13 @@ const fs = require("fs");
 
 // Properties
 let filepath = "./logs/";
-let filename = `${new Date().toString()}.log`;
 
 // Write Error
 const writeError = text => {
   if (text) {
-    // Write file
+    let filename = `${Math.floor(Date.now() / 1000)}.log`;
     fs.writeFile(`${filepath}${filename}`, text, function(error) {
-      if (error) {
-        return console.log(`Failed to write error log: ${error}`);
-      }
+      if (error) return console.log(`Failed to write error log: ${error}`);
       return console.log(`Saved log file as ${filename}`);
     });
   }
