@@ -1,5 +1,6 @@
 // Imports
 const Strings = require("../strings");
+const Logger = require("../services/logger");
 const Constants = require("../constants");
 
 // Set Database Instance
@@ -11,7 +12,10 @@ let setDbInstance = instance => {
 // Get All Orders
 let getAllOrders = (request, response) => {
   database.query(`SELECT * FROM orders`, (error, orders) => {
-    if (error) return response.sendStatus(500);
+    if (error) {
+      Logger.writeError(error);
+      return response.sendStatus(500);
+    }
     let counter = 1;
     let modifiedOrders = [];
     orders.forEach(order => {
@@ -23,7 +27,10 @@ let getAllOrders = (request, response) => {
          `,
         [0, 1, 2, 3],
         (error, result) => {
-          if (error) return response.sendStatus(500);
+          if (error) {
+            Logger.writeError(error);
+            return response.sendStatus(500);
+          }
 
           // Append properties
           order.owner = result[0][0];
@@ -60,7 +67,10 @@ let getOrderById = (request, response) => {
   database.query(
     `SELECT * FROM orders WHERE id="${request.params.id}"`,
     (error, orders) => {
-      if (error) return response.sendStatus(500);
+      if (error) {
+        Logger.writeError(error);
+        return response.sendStatus(500);
+      }
       if (orders && orders.length) {
         let order = orders[0];
         database.query(
@@ -72,7 +82,10 @@ let getOrderById = (request, response) => {
         `,
           [0, 1, 2, 3],
           (error, result) => {
-            if (error) return response.sendStatus(500);
+            if (error) {
+              Logger.writeError(error);
+              return response.sendStatus(500);
+            }
             // Append Properties
             order.owner = result[0][0];
             order.party = result[1][0];
@@ -132,7 +145,10 @@ let createOrder = (request, response) => {
   database.query(
     `INSERT INTO orders (name, description, owner, party, is_designing, is_scanning) VALUES (${dbValues})`,
     error => {
-      if (error) return response.sendStatus(500);
+      if (error) {
+        Logger.writeError(error);
+        return response.sendStatus(500);
+      }
       return response.status(201).json({
         message: Strings.SUCCESS.ORDER_CREATED
       });
@@ -146,10 +162,16 @@ let deleteOrder = (request, response) => {
 
   // Delete Jobs in the order
   database.query(`DELETE FROM jobs WHERE order_id=${orderId}`, error => {
-    if (error) return response.sendStatus(500);
+    if (error) {
+      Logger.writeError(error);
+      return response.sendStatus(500);
+    }
     // Delete order
     database.query(`DELETE FROM orders WHERE id=${orderId}`, error => {
-      if (error) return response.sendStatus(500);
+      if (error) {
+        Logger.writeError(error);
+        return response.sendStatus(500);
+      }
       return response.json({
         message: Strings.SUCCESS.ORDER_DELETED
       });
@@ -174,7 +196,10 @@ let addJobs = (request, response) => {
   database.query(
     `SELECT * FROM orders WHERE id=${orderId}`,
     (error, result) => {
-      if (error) return response.sendStatus(500);
+      if (error) {
+        Logger.writeError(error);
+        return response.sendStatus(500);
+      }
       if (result && result.length === 0) {
         return response.status(404).json({
           message: Strings.ERRORS.ORDER_NOT_FOUND
@@ -199,7 +224,10 @@ let addJobs = (request, response) => {
         database.query(
           `INSERT INTO jobs (order_id, quality, quantity, size_units, size_width, size_height, type, is_high_priority, notes, delivery_expected_by) VALUES (${values})`,
           error => {
-            if (error) return response.sendStatus(500);
+            if (error) {
+              Logger.writeError(error);
+              return response.sendStatus(500);
+            }
             // Send response if all jobs have been inserted
             if (counter === request.body.length) {
               return response.json({
@@ -223,7 +251,10 @@ let removeJob = (request, response) => {
   database.query(
     `DELETE FROM jobs WHERE order_id=${orderId} AND id=${jobId}`,
     error => {
-      if (error) return response.sendStatus(500);
+      if (error) {
+        Logger.writeError(error);
+        return response.sendStatus(500);
+      }
       return response.json({
         message: Strings.SUCCESS.JOB_REMOVED
       });
