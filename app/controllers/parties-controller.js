@@ -1,5 +1,6 @@
 // Imports
 const Strings = require("../strings");
+const Logger = require("../services/logger");
 
 // Set Database Instance
 let database = null;
@@ -10,7 +11,10 @@ let setDbInstance = instance => {
 // Get All Parties
 let getAllParties = (request, response) => {
   database.query(`SELECT * FROM parties`, (error, parties) => {
-    if (error) return response.sendStatus(500);
+    if (error) {
+      Logger.writeError(error);
+      return response.sendStatus(500);
+    }
     return response.json(parties);
   });
 };
@@ -31,7 +35,10 @@ let getPartyByPhone = (request, response) => {
   database.query(
     `SELECT * FROM parties WHERE mobile LIKE "${request.body.phone}"`,
     (error, parties) => {
-      if (error) return response.sendStatus(500);
+      if (error) {
+        Logger.writeError(error);
+        return response.sendStatus(500);
+      }
       return response.json(parties);
     }
   );

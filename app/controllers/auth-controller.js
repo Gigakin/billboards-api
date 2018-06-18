@@ -3,6 +3,7 @@ const jwt = require("jsonwebtoken");
 
 // Imports
 const Strings = require("../strings");
+const Logger = require("../services/logger");
 const Constants = require("../constants");
 
 // Set Database Instance
@@ -24,7 +25,10 @@ let login = (request, response) => {
   database.query(
     `SELECT * FROM users WHERE email="${request.body.username}"`,
     (error, users) => {
-      if (error) return response.sendStatus(500);
+      if (error) {
+        Logger.writeError(error);
+        return response.sendStatus(500);
+      }
       if (users && users.length) {
         // Match passwords
         if (request.body.password !== users[0].password) {
@@ -47,7 +51,10 @@ let login = (request, response) => {
         database.query(
           `SELECT * FROM user_roles WHERE id="${users[0].role}"`,
           (error, userrole) => {
-            if (error) return response.sendStatus(500);
+            if (error) {
+              Logger.writeError(error);
+              return response.sendStatus(500);
+            }
 
             if (userrole) {
               // Update user role

@@ -1,3 +1,6 @@
+// Imports
+const Logger = require("../services/logger");
+
 // Set Database Instance
 let database = null;
 let setDbInstance = instance => {
@@ -7,7 +10,10 @@ let setDbInstance = instance => {
 // Get Job Types
 let getJobTypes = (request, response) => {
   database.query(`SELECT * FROM job_types`, (error, jobtypes) => {
-    if (error) return response.sendStatus(500);
+    if (error) {
+      Logger.writeError(error);
+      return response.sendStatus(500);
+    }
     return response.json(jobtypes);
   });
 };
@@ -15,7 +21,10 @@ let getJobTypes = (request, response) => {
 // Get Job Qualities
 let getJobQualities = (request, response) => {
   database.query(`SELECT * FROM job_qualities`, (error, qualities) => {
-    if (error) return response.sendStatus(500);
+    if (error) {
+      Logger.writeError(error);
+      return response.sendStatus(500);
+    }
     return response.json(qualities);
   });
 };
@@ -23,7 +32,10 @@ let getJobQualities = (request, response) => {
 // Get Units of Measurements
 let getUnitsOfMeasurements = (request, response) => {
   database.query(`SELECT * FROM uom`, (error, units) => {
-    if (error) return response.sendStatus(500);
+    if (error) {
+      Logger.writeError(error);
+      return response.sendStatus(500);
+    }
     return response.json(units);
   });
 };

@@ -1,7 +1,6 @@
 // Imports
 const Strings = require("../strings");
 const Logger = require("../services/logger");
-const Constants = require("../constants");
 
 // Set Database Instance
 let database = null;

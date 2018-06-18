@@ -1,3 +1,6 @@
+// Imports
+const Logger = require("../services/logger");
+
 // Set Database Instance
 let database = null;
 let setDbInstance = instance => {
@@ -7,7 +10,10 @@ let setDbInstance = instance => {
 // Get Account Owners
 let getAccountOwners = (request, response) => {
   database.query(`SELECT * FROM account_owners`, (error, owners) => {
-    if (error) return response.sendStatus(500);
+    if (error) {
+      Logger.writeError(error);
+      return response.sendStatus(500);
+    }
     return response.json(owners);
   });
 };
