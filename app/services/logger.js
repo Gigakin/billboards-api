@@ -1,13 +1,13 @@
 // Modules
 const fs = require("fs");
-const path = require("path");
+
+// Properties
+let filepath = "./logs/";
+let filename = `${new Date().toString()}.log`;
 
 // Write Error
 const writeError = text => {
   if (text) {
-    // Properties
-    let filepath = "./logs/";
-    let filename = `${new Date().toString()}.log`;
     // Write file
     fs.writeFile(`${filepath}${filename}`, text, function(error) {
       if (error) {
@@ -18,7 +18,20 @@ const writeError = text => {
   }
 };
 
+// Check Log Directory
+const logDirectoryExists = () => {
+  if (fs.existsSync(filepath)) return true;
+  return false;
+};
+
+// Create Log Directory
+const createLogDirectory = () => {
+  return fs.mkdirSync(filepath);
+};
+
 // Exports
 module.exports = {
-  writeError: writeError
+  writeError: writeError,
+  logDirectoryExists: logDirectoryExists,
+  createLogDirectory: createLogDirectory
 };

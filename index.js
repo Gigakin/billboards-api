@@ -33,9 +33,11 @@ app.use(bodyParser.json());
 connection.connect(error => {
   if (error) return console.log(error);
 
-  // CORS Configuration
-  const cors = require("./app/cors");
-  app.use(cors);
+  // Initialize Logger
+  const Logger = require("./app/services/logger");
+  if (!Logger.logDirectoryExists()) {
+    return Logger.createLogDirectory();
+  }
 
   // Middlewares
   require("./app/middlewares")(app, securedRoutes, connection);

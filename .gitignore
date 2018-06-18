@@ -13,4 +13,4 @@
 /.idea
 
 # Generated Files
-/logs/*
+/logs
