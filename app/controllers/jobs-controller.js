@@ -40,10 +40,22 @@ let getUnitsOfMeasurements = (request, response) => {
   });
 };
 
+// Get Charges
+let getCharges = (request, response) => {
+  database.query(`SELECT * FROM charges`, (error, charges) => {
+    if (error) {
+      loggify.error(error);
+      return response.sendStatus(500);
+    }
+    return response.json(charges);
+  });
+};
+
 // Exports
 module.exports = {
   setDbInstance: setDbInstance,
   getJobTypes: getJobTypes,
   getJobQualities: getJobQualities,
-  getUnitsOfMeasurements: getUnitsOfMeasurements
+  getUnitsOfMeasurements: getUnitsOfMeasurements,
+  getCharges: getCharges
 };
