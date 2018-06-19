@@ -180,6 +180,45 @@ let deleteOrder = (request, response) => {
   });
 };
 
+// Change Order Status
+let changeOrderStatus = (request, response) => {
+  let orderId = request.params.id;
+
+  // Find Order
+  database.query(
+    `SELECT * FROM orders WHERE id=${orderId}`,
+    (error, orders) => {
+      if (error) {
+        loggify.error(error);
+        return response.sendStatus(500);
+      }
+
+      if (orders && orders.length) {
+        let order = orders[0];
+        let status = request.body.status;
+
+        // Update status
+        return database.query(
+          `UPDATE orders SET status = ${status} WHERE id = ${order.id}`,
+          error => {
+            if (error) {
+              loggify.error(error);
+              return response.sendStatus(500);
+            }
+            return response.json({
+              message: Strings.SUCCESS.ORDER_STATUS_UPDATED
+            });
+          }
+        );
+      }
+
+      return response.status(404).json({
+        message: Strings.ERRORS.ORDER_NOT_FOUND
+      });
+    }
+  );
+};
+
 // Add Jobs
 let addJobs = (request, response) => {
   // Validate
@@ -270,6 +309,7 @@ module.exports = {
   getOrderById: getOrderById,
   createOrder: createOrder,
   deleteOrder: deleteOrder,
+  changeOrderStatus: changeOrderStatus,
   addJobs: addJobs,
   removeJob: removeJob
 };
