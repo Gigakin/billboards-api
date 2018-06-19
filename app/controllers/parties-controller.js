@@ -1,6 +1,8 @@
+// Modules
+const loggify = require("agx-loggify");
+
 // Imports
 const Strings = require("../strings");
-const Logger = require("../services/logger");
 
 // Set Database Instance
 let database = null;
@@ -12,7 +14,7 @@ let setDbInstance = instance => {
 let getAllParties = (request, response) => {
   database.query(`SELECT * FROM parties`, (error, parties) => {
     if (error) {
-      Logger.writeError(error);
+      loggify.error(error);
       return response.sendStatus(500);
     }
     return response.json(parties);
@@ -36,7 +38,7 @@ let getPartyByPhone = (request, response) => {
     `SELECT * FROM parties WHERE mobile LIKE "${request.body.phone}"`,
     (error, parties) => {
       if (error) {
-        Logger.writeError(error);
+        loggify.error(error);
         return response.sendStatus(500);
       }
       return response.json(parties);

@@ -1,5 +1,5 @@
-// Imports
-const Logger = require("../services/logger");
+// Modules
+const loggify = require("agx-loggify");
 
 // Set Database Instance
 let database = null;
@@ -11,7 +11,7 @@ let setDbInstance = instance => {
 let getAccountOwners = (request, response) => {
   database.query(`SELECT * FROM account_owners`, (error, owners) => {
     if (error) {
-      Logger.writeError(error);
+      loggify.error(error);
       return response.sendStatus(500);
     }
     return response.json(owners);

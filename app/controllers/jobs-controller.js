@@ -1,5 +1,5 @@
-// Imports
-const Logger = require("../services/logger");
+// Modules
+const loggify = require("agx-loggify");
 
 // Set Database Instance
 let database = null;
@@ -11,7 +11,7 @@ let setDbInstance = instance => {
 let getJobTypes = (request, response) => {
   database.query(`SELECT * FROM job_types`, (error, jobtypes) => {
     if (error) {
-      Logger.writeError(error);
+      loggify.error(error);
       return response.sendStatus(500);
     }
     return response.json(jobtypes);
@@ -22,7 +22,7 @@ let getJobTypes = (request, response) => {
 let getJobQualities = (request, response) => {
   database.query(`SELECT * FROM job_qualities`, (error, qualities) => {
     if (error) {
-      Logger.writeError(error);
+      loggify.error(error);
       return response.sendStatus(500);
     }
     return response.json(qualities);
@@ -33,7 +33,7 @@ let getJobQualities = (request, response) => {
 let getUnitsOfMeasurements = (request, response) => {
   database.query(`SELECT * FROM uom`, (error, units) => {
     if (error) {
-      Logger.writeError(error);
+      loggify.error(error);
       return response.sendStatus(500);
     }
     return response.json(units);

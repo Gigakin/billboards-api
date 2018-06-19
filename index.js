@@ -1,12 +1,16 @@
 // Modules
 const express = require("express");
 const bodyParser = require("body-parser");
+const loggify = require("agx-loggify");
 const mysql = require("mysql");
 const app = express();
 
 // Properties
 const serverPort = process.env.PORT || 8000;
 const constants = require("./app/constants");
+
+// Initialize Logger
+loggify.start();
 
 // CORS Configuration
 const cors = require("./app/cors");
@@ -31,12 +35,9 @@ app.use(bodyParser.json());
 
 // Establish connection with database
 connection.connect(error => {
-  if (error) return console.log(error);
-
-  // Initialize Logger
-  const Logger = require("./app/services/logger");
-  if (!Logger.logDirectoryExists()) {
-    return Logger.createLogDirectory();
+  if (error) {
+    loggify.error(error);
+    return console.log(error);
   }
 
   // Middlewares

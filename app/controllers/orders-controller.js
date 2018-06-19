@@ -1,6 +1,8 @@
+// Modules
+const loggify = require("agx-loggify");
+
 // Imports
 const Strings = require("../strings");
-const Logger = require("../services/logger");
 
 // Set Database Instance
 let database = null;
@@ -12,7 +14,7 @@ let setDbInstance = instance => {
 let getAllOrders = (request, response) => {
   database.query(`SELECT * FROM orders`, (error, orders) => {
     if (error) {
-      Logger.writeError(error);
+      loggify.error(error);
       return response.sendStatus(500);
     }
     let counter = 1;
@@ -27,7 +29,7 @@ let getAllOrders = (request, response) => {
         [0, 1, 2, 3],
         (error, result) => {
           if (error) {
-            Logger.writeError(error);
+            loggify.error(error);
             return response.sendStatus(500);
           }
 
@@ -67,7 +69,7 @@ let getOrderById = (request, response) => {
     `SELECT * FROM orders WHERE id="${request.params.id}"`,
     (error, orders) => {
       if (error) {
-        Logger.writeError(error);
+        loggify.error(error);
         return response.sendStatus(500);
       }
       if (orders && orders.length) {
@@ -82,7 +84,7 @@ let getOrderById = (request, response) => {
           [0, 1, 2, 3],
           (error, result) => {
             if (error) {
-              Logger.writeError(error);
+              loggify.error(error);
               return response.sendStatus(500);
             }
             // Append Properties
@@ -145,7 +147,7 @@ let createOrder = (request, response) => {
     `INSERT INTO orders (name, description, owner, party, is_designing, is_scanning) VALUES (${dbValues})`,
     error => {
       if (error) {
-        Logger.writeError(error);
+        loggify.error(error);
         return response.sendStatus(500);
       }
       return response.status(201).json({
@@ -162,13 +164,13 @@ let deleteOrder = (request, response) => {
   // Delete Jobs in the order
   database.query(`DELETE FROM jobs WHERE order_id=${orderId}`, error => {
     if (error) {
-      Logger.writeError(error);
+      loggify.error(error);
       return response.sendStatus(500);
     }
     // Delete order
     database.query(`DELETE FROM orders WHERE id=${orderId}`, error => {
       if (error) {
-        Logger.writeError(error);
+        loggify.error(error);
         return response.sendStatus(500);
       }
       return response.json({
@@ -196,7 +198,7 @@ let addJobs = (request, response) => {
     `SELECT * FROM orders WHERE id=${orderId}`,
     (error, result) => {
       if (error) {
-        Logger.writeError(error);
+        loggify.error(error);
         return response.sendStatus(500);
       }
       if (result && result.length === 0) {
@@ -224,7 +226,7 @@ let addJobs = (request, response) => {
           `INSERT INTO jobs (order_id, quality, quantity, size_units, size_width, size_height, type, is_high_priority, notes, delivery_expected_by) VALUES (${values})`,
           error => {
             if (error) {
-              Logger.writeError(error);
+              loggify.error(error);
               return response.sendStatus(500);
             }
             // Send response if all jobs have been inserted
@@ -251,7 +253,7 @@ let removeJob = (request, response) => {
     `DELETE FROM jobs WHERE order_id=${orderId} AND id=${jobId}`,
     error => {
       if (error) {
-        Logger.writeError(error);
+        loggify.error(error);
         return response.sendStatus(500);
       }
       return response.json({

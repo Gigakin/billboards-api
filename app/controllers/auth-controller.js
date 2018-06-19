@@ -1,9 +1,9 @@
 // Modules
 const jwt = require("jsonwebtoken");
+const loggify = require("agx-loggify");
 
 // Imports
 const Strings = require("../strings");
-const Logger = require("../services/logger");
 const Constants = require("../constants");
 
 // Set Database Instance
@@ -26,7 +26,7 @@ let login = (request, response) => {
     `SELECT * FROM users WHERE email="${request.body.username}"`,
     (error, users) => {
       if (error) {
-        Logger.writeError(error);
+        loggify.error(error);
         return response.sendStatus(500);
       }
       if (users && users.length) {
@@ -52,7 +52,7 @@ let login = (request, response) => {
           `SELECT * FROM user_roles WHERE id="${users[0].role}"`,
           (error, userrole) => {
             if (error) {
-              Logger.writeError(error);
+              loggify.error(error);
               return response.sendStatus(500);
             }
 
