@@ -217,7 +217,7 @@ let addJobs = (request, response) => {
           parseInt(job.sizeHeight),
           parseInt(job.type),
           job.isHighPriority,
-          job.notes,
+          `"${job.notes}"`,
           `"${job.delivery_expected_by}"`
         ];
 
