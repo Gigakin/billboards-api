@@ -29,6 +29,17 @@ let getJobQualities = (request, response) => {
   });
 };
 
+// Get Job Features
+let getJobFeatures = (request, response) => {
+  database.query(`SELECT * FROM job_features`, (error, features) => {
+    if (error) {
+      loggify.error(error);
+      return response.sendStatus(500);
+    }
+    return response.json(features);
+  });
+};
+
 // Get Units of Measurements
 let getUnitsOfMeasurements = (request, response) => {
   database.query(`SELECT * FROM uom`, (error, units) => {
@@ -56,6 +67,7 @@ module.exports = {
   setDbInstance: setDbInstance,
   getJobTypes: getJobTypes,
   getJobQualities: getJobQualities,
+  getJobFeatures: getJobFeatures,
   getUnitsOfMeasurements: getUnitsOfMeasurements,
   getCharges: getCharges
 };
