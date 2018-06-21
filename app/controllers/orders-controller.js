@@ -255,6 +255,7 @@ let addJobs = (request, response) => {
           parseInt(job.sizeWidth),
           parseInt(job.sizeHeight),
           parseInt(job.type),
+          parseInt(job.feature),
           job.isHighPriority,
           `"${job.notes}"`,
           `"${job.delivery_expected_by}"`
@@ -262,7 +263,7 @@ let addJobs = (request, response) => {
 
         // Insert into database
         database.query(
-          `INSERT INTO jobs (order_id, quality, quantity, size_units, size_width, size_height, type, is_high_priority, notes, delivery_expected_by) VALUES (${values})`,
+          `INSERT INTO jobs (order_id, quality, quantity, size_units, size_width, size_height, type, feature, is_high_priority, notes, delivery_expected_by) VALUES (${values})`,
           error => {
             if (error) {
               loggify.error(error);
