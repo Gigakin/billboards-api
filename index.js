@@ -10,7 +10,7 @@ const serverPort = process.env.PORT || 8000;
 const constants = require("./app/constants");
 
 // Initialize Logger
-loggify.start();
+loggify.start("logs", ".txt");
 
 // CORS Configuration
 const cors = require("./app/cors");

@@ -16,7 +16,7 @@
     "start": "node index.js"
   },
   "dependencies": {
-    "agx-loggify": "^1.1.0-beta",
+    "agx-loggify": "^1.2.2-beta",
     "body-parser": "^1.18.3",
     "express": "^4.16.2",
     "jsonwebtoken": "^8.2.2",
