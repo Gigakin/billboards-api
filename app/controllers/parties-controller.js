@@ -21,9 +21,6 @@ let getAllParties = (request, response) => {
   });
 };
 
-// Get Party By ID
-let getPartyById = (request, response) => {};
-
 // Get Party By Phone
 let getPartyByPhone = (request, response) => {
   // Validate
@@ -53,7 +50,6 @@ let createParty = (request, response) => {};
 module.exports = {
   setDbInstance: setDbInstance,
   getAllParties: getAllParties,
-  getPartyById: getPartyById,
   getPartyByPhone: getPartyByPhone,
   createParty: createParty
 };

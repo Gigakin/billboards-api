@@ -5,7 +5,6 @@ const partiesController = require("../controllers/parties-controller");
 module.exports = (app, dbInstance) => {
   partiesController.setDbInstance(dbInstance);
   app.get("/api/parties", partiesController.getAllParties);
-  app.get("/api/parties/:id", partiesController.getPartyById);
   app.post("/api/parties/phone", partiesController.getPartyByPhone);
   app.post("/api/parties", partiesController.createParty);
 };
