@@ -255,7 +255,7 @@ let addJobs = (request, response) => {
           parseInt(job.sizeWidth),
           parseInt(job.sizeHeight),
           parseInt(job.type),
-          parseInt(job.feature),
+          job.feature ? parseInt(job.feature) : null,
           job.isHighPriority,
           `"${job.notes}"`,
           `"${job.delivery_expected_by}"`
