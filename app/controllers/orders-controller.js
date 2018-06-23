@@ -211,11 +211,12 @@ let changeOrderStatus = (request, response) => {
             });
           }
         );
+      } else {
+        // No orders found
+        return response.status(404).json({
+          message: Strings.ERRORS.ORDER_NOT_FOUND
+        });
       }
-
-      return response.status(404).json({
-        message: Strings.ERRORS.ORDER_NOT_FOUND
-      });
     }
   );
 };
@@ -241,6 +242,7 @@ let addJobs = (request, response) => {
         loggify.error(error);
         return response.sendStatus(500);
       }
+      // No orders found
       if (result && result.length === 0) {
         return response.status(404).json({
           message: Strings.ERRORS.ORDER_NOT_FOUND
