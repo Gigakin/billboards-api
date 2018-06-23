@@ -37,6 +37,7 @@ let getAllOrders = (request, response) => {
           order.owner = result[0][0];
           order.party = result[1][0];
           order.status = result[2][0];
+          order.jobs = result[3];
           order.isHighPriority = false;
 
           // Set High Priority Flag
