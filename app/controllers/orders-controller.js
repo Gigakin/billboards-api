@@ -24,9 +24,10 @@ let getAllOrders = (request, response) => {
         `SELECT * FROM account_owners WHERE id=${order.owner};
          SELECT * FROM parties WHERE id=${order.party};
          SELECT * FROM order_statuses WHERE id=${order.status};
-         SELECT * FROM jobs WHERE order_id=${order.id}
+         SELECT * FROM jobs WHERE order_id=${order.id};
+         SELECT * FROM orders
          `,
-        [0, 1, 2, 3],
+        [0, 1, 2, 3, 4],
         (error, result) => {
           if (error) {
             loggify.error(error);
@@ -51,6 +52,19 @@ let getAllOrders = (request, response) => {
               }
             });
           }
+
+          // Calculate charges for jobs
+          order.jobs.forEach(job => {
+            result[4].forEach(charge => {
+              if (
+                charge.job_feature == job.feature &&
+                charge.job_quality == job.quality &&
+                charge.job_type == job.type
+              ) {
+                job.rate = charge;
+              }
+            });
+          });
 
           // Push to modified orders
           modifiedOrders.push(order);
@@ -80,14 +94,16 @@ let getOrderById = (request, response) => {
           SELECT * FROM account_owners WHERE id=${order.owner};
           SELECT * FROM parties WHERE id=${order.party};
           SELECT * FROM order_statuses WHERE id=${order.status};
-          SELECT * FROM jobs WHERE order_id=${order.id}
+          SELECT * FROM jobs WHERE order_id=${order.id};
+          SELECT * FROM charges
         `,
-          [0, 1, 2, 3],
+          [0, 1, 2, 3, 4],
           (error, result) => {
             if (error) {
               loggify.error(error);
               return response.sendStatus(500);
             }
+
             // Append Properties
             order.owner = result[0][0];
             order.party = result[1][0];
@@ -111,6 +127,20 @@ let getOrderById = (request, response) => {
                 }
               });
             }
+
+            // Calculate charges for jobs
+            order.jobs.forEach(job => {
+              result[4].forEach(charge => {
+                if (
+                  charge.job_feature == job.feature &&
+                  charge.job_quality == job.quality &&
+                  charge.job_type == job.type
+                ) {
+                  job.rate = charge;
+                }
+              });
+            });
+
             // Send response
             response.json(order);
           }
