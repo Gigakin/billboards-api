@@ -341,6 +341,40 @@ let removeJob = (request, response) => {
   );
 };
 
+// Set Job Advance Amounts
+let setJobAdvanceAmounts = (request, response) => {
+  // Validate
+  if (!request.body) {
+    return response.status(400).json({
+      message: Strings.ERRORS.MISSING_REQUIRED_FIELDS
+    });
+  }
+
+  // Extract key values
+  // Keys are the job ids (Array)
+  let keys = Object.keys(request.body);
+
+  // Save advance amounts to database
+  let counter = 0;
+  keys.forEach((key, index) => {
+    database.query(
+      `UPDATE jobs SET advance=${request.body[key]} WHERE id = ${key}`,
+      error => {
+        if (error) {
+          loggify.error(error);
+          return response.sendStatus(500);
+        }
+        if (counter === index) {
+          return response.json({
+            message: Strings.SUCCESS.ADVANCE_AMOUNT_CAPTURED
+          });
+        }
+        counter++;
+      }
+    );
+  });
+};
+
 // Exports
 module.exports = {
   setDbInstance: setDbInstance,
@@ -350,5 +384,6 @@ module.exports = {
   deleteOrder: deleteOrder,
   changeOrderStatus: changeOrderStatus,
   addJobs: addJobs,
-  removeJob: removeJob
+  removeJob: removeJob,
+  setJobAdvanceAmounts: setJobAdvanceAmounts
 };
