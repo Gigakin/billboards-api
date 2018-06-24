@@ -136,6 +136,11 @@ let getOrderById = (request, response) => {
                   charge.job_quality == job.quality &&
                   charge.job_type == job.type
                 ) {
+                  // calculate total amount
+                  // hardcoded for now. must be
+                  // calculated by conversions
+                  charge.cost = 1200;
+                  // Append rates
                   job.rate = charge;
                 }
               });
