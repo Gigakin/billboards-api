@@ -6,9 +6,9 @@ const partiesRoutes = require("./parties-routes");
 const jobsRoutes = require("./jobs-routes");
 
 // Exports
-module.exports = (app, securedRoutes, dbInstance) => {
+module.exports = (app, securedRoutes, dbInstance, uploads) => {
   authRoutes(app, dbInstance);
-  ordersRoutes(app, dbInstance);
+  ordersRoutes(app, dbInstance, uploads);
   ownersRoutes(app, dbInstance);
   partiesRoutes(app, dbInstance);
   jobsRoutes(app, dbInstance);

@@ -375,6 +375,35 @@ let setJobAdvanceAmounts = (request, response) => {
   });
 };
 
+// Save Customer File
+let saveCustomerFile = (request, response) => {
+  // Variables
+  let jobId = request.params.id;
+  // Validate
+  if (request.file) {
+    let file = request.file;
+    // Save in database
+    database.query(
+      `INSERT INTO files (name, location, job, type) VALUES ("${
+        file.filename
+      }", "${file.path}", ${jobId}, 1)`,
+      error => {
+        if (error) {
+          loggify.error(error);
+          return response.sendStatus(500);
+        }
+        return response.json({
+          message: Strings.SUCCESS.FILE_UPLOADED
+        });
+      }
+    );
+  } else {
+    return response.status(400).json({
+      message: Strings.ERRORS.NO_FILE_PROVIDED
+    });
+  }
+};
+
 // Exports
 module.exports = {
   setDbInstance: setDbInstance,
@@ -385,5 +414,6 @@ module.exports = {
   changeOrderStatus: changeOrderStatus,
   addJobs: addJobs,
   removeJob: removeJob,
-  setJobAdvanceAmounts: setJobAdvanceAmounts
+  setJobAdvanceAmounts: setJobAdvanceAmounts,
+  saveCustomerFile: saveCustomerFile
 };
