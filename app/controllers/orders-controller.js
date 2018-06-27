@@ -3,6 +3,7 @@ const loggify = require("agx-loggify");
 
 // Imports
 const Strings = require("../strings");
+const Methods = require("../methods");
 
 // Set Database Instance
 let database = null;
@@ -284,6 +285,9 @@ let addJobs = (request, response) => {
         });
       }
 
+      // Store IDs of jobs with file attahcments
+      let jobsWithFiles = [];
+
       request.body.forEach(job => {
         let values = [
           parseInt(orderId),
@@ -302,17 +306,25 @@ let addJobs = (request, response) => {
         // Insert into database
         database.query(
           `INSERT INTO jobs (order_id, quality, quantity, size_units, size_width, size_height, type, feature, is_high_priority, notes, delivery_expected_by) VALUES (${values})`,
-          error => {
+          (error, result) => {
             if (error) {
               loggify.error(error);
               return response.sendStatus(500);
             }
+
+            // Check if this job has file attachment
+            if (job.file && !Methods.isObjectEmpty(job.file)) {
+              jobsWithFiles.push(result.insertId);
+            }
+
             // Send response if all jobs have been inserted
             if (counter === request.body.length) {
               return response.json({
-                message: Strings.SUCCESS.JOBS_ADDED
+                message: Strings.SUCCESS.JOBS_ADDED,
+                jobsWithFiles: jobsWithFiles
               });
             }
+
             // otherise increment counter and loop
             counter++;
           }
