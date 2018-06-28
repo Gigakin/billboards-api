@@ -338,19 +338,29 @@ let addJobs = (request, response) => {
 let removeJob = (request, response) => {
   let orderId = request.params.orderid;
   let jobId = request.params.jobid;
-  // Remove from Database
-  database.query(
-    `DELETE FROM jobs WHERE order_id=${orderId} AND id=${jobId}`,
-    error => {
-      if (error) {
-        loggify.error(error);
-        return response.sendStatus(500);
-      }
-      return response.json({
-        message: Strings.SUCCESS.JOB_REMOVED
-      });
+
+  // Check if job has file attachments
+  // If it does, delete files
+  database.query(`DELETE FROM files WHERE job = ${jobId}`, error => {
+    if (error) {
+      loggify.error(error);
+      return response.sendStatus(500);
     }
-  );
+
+    // Remove from Database
+    database.query(
+      `DELETE FROM jobs WHERE order_id=${orderId} AND id=${jobId}`,
+      error => {
+        if (error) {
+          loggify.error(error);
+          return response.sendStatus(500);
+        }
+        return response.json({
+          message: Strings.SUCCESS.JOB_REMOVED
+        });
+      }
+    );
+  });
 };
 
 // Set Job Advance Amounts
