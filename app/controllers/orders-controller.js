@@ -313,7 +313,7 @@ let addJobs = (request, response) => {
             }
 
             // Check if this job has file attachment
-            if (job.file && !Methods.isObjectEmpty(job.file)) {
+            if (job.hasFileAttachment) {
               jobsWithFiles.push(result.insertId);
             }
 
