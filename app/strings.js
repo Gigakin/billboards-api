@@ -4,9 +4,12 @@ module.exports = {
     MISSING_REQUIRED_FIELDS: "One or more required fields are missing.",
     NO_FILE_PROVIDED: "No file was specified for upload.",
     USER_NOT_FOUND: "User not found.",
+    PARTY_NOT_FOUND: "Party not found.",
     ORDER_NOT_FOUND: "Order not found.",
     JOB_NOT_FOUND: "Job not found.",
-    WRONG_PASSWORD: "Wrong password."
+    WRONG_PASSWORD: "Wrong password.",
+    MOBILE_ALREADY_IN_USE:
+      "Mobile number is already associated with another party"
   },
   SUCCESS: {
     ORDER_CREATED: "Order created!",
