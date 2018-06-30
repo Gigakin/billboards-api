@@ -60,6 +60,9 @@ connection.connect(error => {
     return console.log(error);
   }
 
+  // Static Content
+  app.use("/uploads", express.static("./uploads"));
+
   // Middlewares
   require("./app/middlewares")(app, securedRoutes, connection);
 

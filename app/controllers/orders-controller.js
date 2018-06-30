@@ -3,6 +3,7 @@ const loggify = require("agx-loggify");
 
 // Imports
 const Strings = require("../strings");
+const Constants = require("../constants");
 const Methods = require("../methods");
 
 // Set Database Instance
@@ -96,9 +97,10 @@ let getOrderById = (request, response) => {
           SELECT * FROM parties WHERE id=${order.party};
           SELECT * FROM order_statuses WHERE id=${order.status};
           SELECT * FROM jobs WHERE order_id=${order.id};
+          SELECT * FROM files WHERE order_id=${order.id};
           SELECT * FROM charges
         `,
-          [0, 1, 2, 3, 4],
+          [0, 1, 2, 3, 4, 5],
           (error, result) => {
             if (error) {
               loggify.error(error);
@@ -110,6 +112,7 @@ let getOrderById = (request, response) => {
             order.party = result[1][0];
             order.status = result[2][0];
             order.jobs = result[3];
+            order.files = result[4];
             order.isHighPriority = false;
 
             // Set High Priority Flag
@@ -134,7 +137,7 @@ let getOrderById = (request, response) => {
 
             // Calculate charges for jobs
             order.jobs.forEach(job => {
-              result[4].forEach(charge => {
+              result[5].forEach(charge => {
                 if (
                   charge.job_feature == job.feature &&
                   charge.job_quality == job.quality &&
@@ -422,7 +425,13 @@ let saveCustomerFile = (request, response) => {
 
   // Values
   let file = request.file;
-  let values = [`"${file.filename}"`, `"${file.path}"`, jobId, orderId, 1];
+  let values = [
+    `"${file.filename}"`,
+    `"${Constants.BASE_URL}/${file.path}"`,
+    jobId,
+    orderId,
+    1
+  ];
 
   // Save in Database
   database.query(

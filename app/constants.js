@@ -1,5 +1,6 @@
 // Constants
 module.exports = {
+  BASE_URL: process.env.LK_BB_SERVER_URL,
   DB: {
     HOST: process.env.LK_BB_DB_HOST,
     USER: process.env.LK_BB_DB_USER,
