@@ -140,6 +140,7 @@ let getOrderById = (request, response) => {
                   charge.job_quality == job.quality &&
                   charge.job_type == job.type
                 ) {
+                  if (job.rate) charge.charge = job.rate;
                   job.rate = charge;
                 }
               });
