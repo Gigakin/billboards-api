@@ -414,30 +414,33 @@ let setJobAdvanceAmounts = (request, response) => {
 // Save Customer File
 let saveCustomerFile = (request, response) => {
   // Variables
-  let jobId = request.params.id;
+  let orderId = request.params.orderid;
+  let jobId = request.params.jobid;
+
   // Validate
-  if (request.file) {
-    let file = request.file;
-    // Save in database
-    database.query(
-      `INSERT INTO files (name, location, job, type) VALUES ("${
-        file.filename
-      }", "${file.path}", ${jobId}, 1)`,
-      error => {
-        if (error) {
-          loggify.error(error);
-          return response.sendStatus(500);
-        }
-        return response.json({
-          message: Strings.SUCCESS.FILE_UPLOADED
-        });
-      }
-    );
-  } else {
+  if (!request.file) {
     return response.status(400).json({
       message: Strings.ERRORS.NO_FILE_PROVIDED
     });
   }
+
+  // Values
+  let file = request.file;
+  let values = [`"${file.filename}"`, `"${file.path}"`, jobId, orderId, 1];
+
+  // Save in Database
+  database.query(
+    `INSERT INTO files (name, location, job, order_id, type) VALUES (${values})`,
+    error => {
+      if (error) {
+        loggify.error(error);
+        return response.sendStatus(500);
+      }
+      return response.json({
+        message: Strings.SUCCESS.FILE_UPLOADED
+      });
+    }
+  );
 };
 
 // Exports
