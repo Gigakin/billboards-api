@@ -140,7 +140,7 @@ let getOrderById = (request, response) => {
                   charge.job_quality == job.quality &&
                   charge.job_type == job.type
                 ) {
-                  if (job.rate) charge.charge = job.rate;
+                  if (job.rate && job.rate > 0) charge.charge = job.rate;
                   job.rate = charge;
                 }
               });
@@ -378,10 +378,6 @@ let setJobAdvanceAmounts = (request, response) => {
       message: Strings.ERRORS.MISSING_REQUIRED_FIELDS
     });
   }
-
-  // Extract key values
-  // Keys are the job ids (Array)
-  // let keys = Object.keys(request.body);
 
   // Create data model
   let jobsArray = request.body.map(job => {
