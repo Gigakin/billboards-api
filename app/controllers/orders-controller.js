@@ -3,6 +3,7 @@ const loggify = require("agx-loggify");
 
 // Imports
 const Strings = require("../strings");
+const Methods = require("../methods");
 
 // Set Database Instance
 let database = null;
@@ -120,6 +121,9 @@ let getOrderById = (request, response) => {
                 job.sizeWidth = job.size_width;
                 job.sizeHeight = job.size_height;
                 job.sizeUnits = job.size_units;
+                job.totalSizeInSqFt =
+                  Methods.calculateSqFt(job.size_width, job.size_units) *
+                  Methods.calculateSqFt(job.size_height, job.size_units);
 
                 if (job.is_high_priority) {
                   order.isHighPriority = true;
@@ -136,11 +140,6 @@ let getOrderById = (request, response) => {
                   charge.job_quality == job.quality &&
                   charge.job_type == job.type
                 ) {
-                  // calculate total amount
-                  // hardcoded for now. must be
-                  // calculated by conversions
-                  charge.cost = 1200;
-                  // Append rates
                   job.rate = charge;
                 }
               });
@@ -381,13 +380,20 @@ let setJobAdvanceAmounts = (request, response) => {
 
   // Extract key values
   // Keys are the job ids (Array)
-  let keys = Object.keys(request.body);
+  // let keys = Object.keys(request.body);
+
+  // Create data model
+  let jobsArray = request.body.map(job => {
+    return { advance: job.advance, id: job.id, rate: job.rate.charge };
+  });
 
   // Save advance amounts to database
   let counter = 0;
-  keys.forEach((key, index) => {
+  jobsArray.forEach((job, index) => {
     database.query(
-      `UPDATE jobs SET advance=${request.body[key]} WHERE id = ${key}`,
+      `UPDATE jobs SET advance=${job.advance}, rate=${job.rate} WHERE id = ${
+        job.id
+      }`,
       error => {
         if (error) {
           loggify.error(error);
