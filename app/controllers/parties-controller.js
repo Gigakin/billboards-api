@@ -21,6 +21,22 @@ let getAllParties = (request, response) => {
   });
 };
 
+// Get Party By ID
+let getPartyById = (request, response) => {
+  let partyId = request.params.id;
+  // Get Party
+  database.query(
+    `SELECT * FROM parties WHERE id="${partyId}"`,
+    (error, parties) => {
+      if (error) {
+        loggify.error(error);
+        return response.sendStatus(500);
+      }
+      return response.json(parties[0]);
+    }
+  );
+};
+
 // Get Party By Phone
 let getPartyByPhone = (request, response) => {
   // Validate
@@ -129,6 +145,7 @@ let createParty = (request, response) => {
 module.exports = {
   setDbInstance: setDbInstance,
   getAllParties: getAllParties,
+  getPartyById: getPartyById,
   getPartyByPhone: getPartyByPhone,
   createParty: createParty
 };
