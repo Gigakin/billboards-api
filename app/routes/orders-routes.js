@@ -16,6 +16,6 @@ module.exports = (app, dbInstance, upload) => {
   
   // Jobs Files
   app.post("/api/orders/:orderid/jobs/:jobid/files/customer", upload.single("file"), ordersController.saveCustomerFile);
-  // app.post("/api/jobs/:id/files/designer", upload.single("file"), ordersController.saveDesignerFile);
-  // app.post("/api/jobs/:id/files/printer", upload.single("file"), ordersController.savePrinterFile);
+  app.post("/api/orders/:orderid/jobs/:jobid/files/designer", upload.single("file"), ordersController.saveDesignerFile);
+  app.post("/api/orders/:orderid/jobs/:jobid/files/printer", upload.single("file"), ordersController.savePrinterFile);
 };

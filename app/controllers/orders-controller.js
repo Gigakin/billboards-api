@@ -448,6 +448,82 @@ let saveCustomerFile = (request, response) => {
   );
 };
 
+// Save Designer File
+let saveDesignerFile = (request, response) => {
+  // Variables
+  let orderId = request.params.orderid;
+  let jobId = request.params.jobid;
+
+  // Validate
+  if (!request.file) {
+    return response.status(400).json({
+      message: Strings.ERRORS.NO_FILE_PROVIDED
+    });
+  }
+
+  // Values
+  let file = request.file;
+  let values = [
+    `"${file.filename}"`,
+    `"${Constants.BASE_URL}/${file.path}"`,
+    jobId,
+    orderId,
+    2
+  ];
+
+  // Save in Database
+  database.query(
+    `INSERT INTO files (name, location, job, order_id, type) VALUES (${values})`,
+    error => {
+      if (error) {
+        loggify.error(error);
+        return response.sendStatus(500);
+      }
+      return response.json({
+        message: Strings.SUCCESS.FILE_UPLOADED
+      });
+    }
+  );
+};
+
+// Save Printer File
+let savePrinterFile = (request, response) => {
+  // Variables
+  let orderId = request.params.orderid;
+  let jobId = request.params.jobid;
+
+  // Validate
+  if (!request.file) {
+    return response.status(400).json({
+      message: Strings.ERRORS.NO_FILE_PROVIDED
+    });
+  }
+
+  // Values
+  let file = request.file;
+  let values = [
+    `"${file.filename}"`,
+    `"${Constants.BASE_URL}/${file.path}"`,
+    jobId,
+    orderId,
+    2
+  ];
+
+  // Save in Database
+  database.query(
+    `INSERT INTO files (name, location, job, order_id, type) VALUES (${values})`,
+    error => {
+      if (error) {
+        loggify.error(error);
+        return response.sendStatus(500);
+      }
+      return response.json({
+        message: Strings.SUCCESS.FILE_UPLOADED
+      });
+    }
+  );
+};
+
 // Exports
 module.exports = {
   setDbInstance: setDbInstance,
@@ -459,5 +535,7 @@ module.exports = {
   addJobs: addJobs,
   removeJob: removeJob,
   setJobAdvanceAmounts: setJobAdvanceAmounts,
-  saveCustomerFile: saveCustomerFile
+  saveCustomerFile: saveCustomerFile,
+  saveDesignerFile: saveDesignerFile,
+  savePrinterFile: savePrinterFile
 };
