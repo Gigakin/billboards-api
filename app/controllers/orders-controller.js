@@ -506,7 +506,7 @@ let savePrinterFile = (request, response) => {
     `"${Constants.BASE_URL}/${file.path}"`,
     jobId,
     orderId,
-    2
+    3
   ];
 
   // Save in Database
