@@ -435,7 +435,9 @@ let saveCustomerFile = (request, response) => {
 
   // Check if file is already provided
   database.query(
-    `SELECT * FROM files WHERE job=${jobId} AND order_id=${orderId}`,
+    `SELECT * FROM files WHERE job=${jobId} AND order_id=${orderId} AND type=${
+      values[4]
+    }`,
     (error, records) => {
       if (error) {
         loggify.error(error);
@@ -501,7 +503,9 @@ let saveDesignerFile = (request, response) => {
 
   // Check if file is already provided
   database.query(
-    `SELECT * FROM files WHERE job=${jobId} AND order_id=${orderId}`,
+    `SELECT * FROM files WHERE job=${jobId} AND order_id=${orderId} AND type=${
+      values[4]
+    }`,
     (error, records) => {
       if (error) {
         loggify.error(error);
@@ -567,7 +571,9 @@ let savePrinterFile = (request, response) => {
 
   // Check if file is already provided
   database.query(
-    `SELECT * FROM files WHERE job=${jobId} AND order_id=${orderId}`,
+    `SELECT * FROM files WHERE job=${jobId} AND order_id=${orderId} AND type=${
+      values[4]
+    }`,
     (error, records) => {
       if (error) {
         loggify.error(error);
