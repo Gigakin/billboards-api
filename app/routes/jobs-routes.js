@@ -9,4 +9,5 @@ module.exports = (app, dbInstance) => {
   app.get("/api/jobs/features", jobsController.getJobFeatures);
   app.get("/api/jobs/uoms", jobsController.getUnitsOfMeasurements);
   app.get("/api/jobs/charges", jobsController.getCharges);
+  app.post("/api/jobs/:id/status", jobsController.changeJobStatus);
 };

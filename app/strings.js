@@ -18,7 +18,8 @@ module.exports = {
     ADVANCE_AMOUNT_CAPTURED: "Advance amount(s) were captured!",
     FILE_UPLOADED: "File(s) uploaded successfully.",
     FILE_UPDATED: "File(s) updated.",
-    JOBS_ADDED: "Job(s) were added to the order",
-    JOB_REMOVED: "Job removed"
+    JOBS_ADDED: "Job(s) were added to the order.",
+    JOB_STATUS_CHANGED: "Job status was changed.",
+    JOB_REMOVED: "Job removed."
   }
 };
