@@ -9,14 +9,15 @@ module.exports = {
     JOB_NOT_FOUND: "Job not found.",
     WRONG_PASSWORD: "Wrong password.",
     MOBILE_ALREADY_IN_USE:
-      "Mobile number is already associated with another party"
+      "Mobile number is already associated with another party."
   },
   SUCCESS: {
     ORDER_CREATED: "Order created!",
     ORDER_DELETED: "Order deleted!",
     ORDER_STATUS_UPDATED: "Order status updated!",
     ADVANCE_AMOUNT_CAPTURED: "Advance amount(s) were captured!",
-    FILE_UPLOADED: "File(s) uploaded successfully",
+    FILE_UPLOADED: "File(s) uploaded successfully.",
+    FILE_UPDATED: "File(s) updated.",
     JOBS_ADDED: "Job(s) were added to the order",
     JOB_REMOVED: "Job removed"
   }

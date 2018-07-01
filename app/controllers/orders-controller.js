@@ -433,17 +433,45 @@ let saveCustomerFile = (request, response) => {
     1
   ];
 
-  // Save in Database
+  // Check if file is already provided
   database.query(
-    `INSERT INTO files (name, location, job, order_id, type) VALUES (${values})`,
-    error => {
+    `SELECT * FROM files WHERE job=${jobId} AND order_id=${orderId}`,
+    (error, records) => {
       if (error) {
         loggify.error(error);
         return response.sendStatus(500);
       }
-      return response.json({
-        message: Strings.SUCCESS.FILE_UPLOADED
-      });
+      if (records && records.length) {
+        // Files record exists
+        database.query(
+          `UPDATE files SET name=${values[0]}, location=${
+            values[1]
+          } WHERE job=${jobId} AND order_id=${orderId} AND type=${values[4]}`,
+          error => {
+            if (error) {
+              loggify.error(error);
+              return response.sendStatus(500);
+            }
+            return response.json({
+              message: Strings.SUCCESS.FILE_UPDATED
+            });
+          }
+        );
+      } else {
+        // Save in Database
+        database.query(
+          `INSERT INTO files (name, location, job, order_id, type) VALUES (${values})`,
+          error => {
+            if (error) {
+              loggify.error(error);
+              return response.sendStatus(500);
+            }
+            return response.json({
+              message: Strings.SUCCESS.FILE_UPLOADED
+            });
+          }
+        );
+      }
     }
   );
 };
@@ -471,17 +499,45 @@ let saveDesignerFile = (request, response) => {
     2
   ];
 
-  // Save in Database
+  // Check if file is already provided
   database.query(
-    `INSERT INTO files (name, location, job, order_id, type) VALUES (${values})`,
-    error => {
+    `SELECT * FROM files WHERE job=${jobId} AND order_id=${orderId}`,
+    (error, records) => {
       if (error) {
         loggify.error(error);
         return response.sendStatus(500);
       }
-      return response.json({
-        message: Strings.SUCCESS.FILE_UPLOADED
-      });
+      if (records && records.length) {
+        // Files record exists
+        database.query(
+          `UPDATE files SET name=${values[0]}, location=${
+            values[1]
+          } WHERE job=${jobId} AND order_id=${orderId} AND type=${values[4]}`,
+          error => {
+            if (error) {
+              loggify.error(error);
+              return response.sendStatus(500);
+            }
+            return response.json({
+              message: Strings.SUCCESS.FILE_UPDATED
+            });
+          }
+        );
+      } else {
+        // Save in Database
+        database.query(
+          `INSERT INTO files (name, location, job, order_id, type) VALUES (${values})`,
+          error => {
+            if (error) {
+              loggify.error(error);
+              return response.sendStatus(500);
+            }
+            return response.json({
+              message: Strings.SUCCESS.FILE_UPLOADED
+            });
+          }
+        );
+      }
     }
   );
 };
@@ -509,17 +565,45 @@ let savePrinterFile = (request, response) => {
     3
   ];
 
-  // Save in Database
+  // Check if file is already provided
   database.query(
-    `INSERT INTO files (name, location, job, order_id, type) VALUES (${values})`,
-    error => {
+    `SELECT * FROM files WHERE job=${jobId} AND order_id=${orderId}`,
+    (error, records) => {
       if (error) {
         loggify.error(error);
         return response.sendStatus(500);
       }
-      return response.json({
-        message: Strings.SUCCESS.FILE_UPLOADED
-      });
+      if (records && records.length) {
+        // Files record exists
+        database.query(
+          `UPDATE files SET name=${values[0]}, location=${
+            values[1]
+          } WHERE job=${jobId} AND order_id=${orderId} AND type=${values[4]}`,
+          error => {
+            if (error) {
+              loggify.error(error);
+              return response.sendStatus(500);
+            }
+            return response.json({
+              message: Strings.SUCCESS.FILE_UPDATED
+            });
+          }
+        );
+      } else {
+        // Save in Database
+        database.query(
+          `INSERT INTO files (name, location, job, order_id, type) VALUES (${values})`,
+          error => {
+            if (error) {
+              loggify.error(error);
+              return response.sendStatus(500);
+            }
+            return response.json({
+              message: Strings.SUCCESS.FILE_UPLOADED
+            });
+          }
+        );
+      }
     }
   );
 };
