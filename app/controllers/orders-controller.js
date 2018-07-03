@@ -614,6 +614,44 @@ let savePrinterFile = (request, response) => {
   );
 };
 
+// Handover Jobs
+const handoverJobs = (request, response) => {
+  // Validate
+  if (!request.body || request.body.length === 0) {
+    return response.status(400).json({
+      message: Strings.ERRORS.MISSING_REQUIRED_FIELDS
+    });
+  }
+
+  // Variables
+  let counter = 1;
+  let encounteredError = false;
+
+  // mark as handed over
+  request.body.forEach(jobid => {
+    if (encounteredError) return;
+
+    database.query(
+      `UPDATE jobs SET is_handed_over=true WHERE id=${jobid}`,
+      error => {
+        if (error) {
+          loggify.error(error);
+          encounteredError = true;
+          return response.sendStatus(500);
+        }
+
+        if (counter === request.body.length) {
+          return response.json({
+            message: Strings.SUCCESS.JOBS_HANDED_OVER
+          });
+        }
+
+        return counter++;
+      }
+    );
+  });
+};
+
 // Exports
 module.exports = {
   setDbInstance: setDbInstance,
@@ -627,5 +665,6 @@ module.exports = {
   setJobAdvanceAmounts: setJobAdvanceAmounts,
   saveCustomerFile: saveCustomerFile,
   saveDesignerFile: saveDesignerFile,
-  savePrinterFile: savePrinterFile
+  savePrinterFile: savePrinterFile,
+  handoverJobs: handoverJobs
 };

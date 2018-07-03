@@ -20,6 +20,7 @@ module.exports = {
     FILE_UPDATED: "File(s) updated.",
     JOBS_ADDED: "Job(s) were added to the order.",
     JOB_STATUS_CHANGED: "Job status was changed.",
-    JOB_REMOVED: "Job removed."
+    JOB_REMOVED: "Job removed.",
+    JOBS_HANDED_OVER: "Jobs were handed over."
   }
 };
