@@ -290,7 +290,8 @@ let addJobs = (request, response) => {
       // Store IDs of jobs with file attahcments
       let values = [];
       let jobsWithFiles = [];
-      request.body.forEach((job, breakLoop) => {
+      let breakLoop = false;
+      request.body.forEach(job => {
         // Break the loop, so as to prevent
         // multiple request headers sent
         if (breakLoop) return;
