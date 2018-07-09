@@ -65,6 +65,17 @@ let getCharges = (request, response) => {
   });
 };
 
+// Get Statuses
+let getStatuses = (request, response) => {
+  database.query(`SELECT * FROM job_statuses`, (error, result) => {
+    if (error) {
+      loggify.error(error);
+      return response.sendStatus(500);
+    }
+    return response.json(result);
+  });
+};
+
 // Change Status
 let changeJobStatus = (request, response) => {
   // Validate
@@ -116,5 +127,6 @@ module.exports = {
   getJobFeatures: getJobFeatures,
   getUnitsOfMeasurements: getUnitsOfMeasurements,
   getCharges: getCharges,
+  getStatuses: getStatuses,
   changeJobStatus: changeJobStatus
 };
