@@ -12,6 +12,7 @@ module.exports = (app, dbInstance, upload) => {
   app.delete("/api/orders/:id", ordersController.deleteOrder);
   app.post("/api/orders/:id/jobs", ordersController.addJobs);
   app.post("/api/orders/:id/jobs/advance", ordersController.setJobAdvanceAmounts);
+  app.post("/api/orders/:orderid/jobs/:jobid/payments", ordersController.acceptPayments);
   app.delete("/api/orders/:orderid/jobs/:jobid", ordersController.removeJob);
 
   // Jobs Files

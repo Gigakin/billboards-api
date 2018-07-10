@@ -650,6 +650,31 @@ const handoverJobs = (request, response) => {
   );
 };
 
+// Accept Payments
+const acceptPayments = (request, response) => {
+  // Validate
+  if (!request.body || !request.body.advance) {
+    return response.status(400).json({
+      message: Strings.ERRORS.MISSING_REQUIRED_FIELDS
+    });
+  }
+
+  // Variables
+  let jobId = request.params.jobid;
+
+  // Query
+  database.query(
+    `UPDATE jobs SET advance=${request.body.advance} WHERE id=${jobId}`,
+    error => {
+      if (error) {
+        loggify.error(error);
+        return response.sendStatus(500);
+      }
+      return response.json({ message: Strings.SUCCESS.PAYMENT_ACCEPTED });
+    }
+  );
+};
+
 // Exports
 module.exports = {
   setDbInstance: setDbInstance,
@@ -664,5 +689,6 @@ module.exports = {
   saveCustomerFile: saveCustomerFile,
   saveDesignerFile: saveDesignerFile,
   savePrinterFile: savePrinterFile,
-  handoverJobs: handoverJobs
+  handoverJobs: handoverJobs,
+  acceptPayments: acceptPayments
 };

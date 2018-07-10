@@ -21,6 +21,7 @@ module.exports = {
     JOBS_ADDED: "Job(s) were added to the order.",
     JOB_STATUS_CHANGED: "Job status was changed.",
     JOB_REMOVED: "Job removed.",
-    JOBS_HANDED_OVER: "Jobs were handed over."
+    JOBS_HANDED_OVER: "Jobs were handed over.",
+    PAYMENT_ACCEPTED: "Payment was accepted."
   }
 };
