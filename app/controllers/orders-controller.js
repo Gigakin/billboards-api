@@ -618,39 +618,35 @@ let savePrinterFile = (request, response) => {
 // Handover Jobs
 const handoverJobs = (request, response) => {
   // Validate
-  if (!request.body || request.body.length === 0) {
+  if (
+    !request.body ||
+    !request.body.id ||
+    !request.body.amount_received ||
+    !request.body.payment_mode
+  ) {
     return response.status(400).json({
       message: Strings.ERRORS.MISSING_REQUIRED_FIELDS
     });
   }
 
-  // Variables
-  let counter = 1;
-  let encounteredError = false;
+  let paymentMode = `"${request.body.payment_mode}"`;
+  let paymentModeDetails = `"${request.body.payment_mode_details}"`;
+  let amountReceived = parseFloat(request.body.amount_received);
+  let jobId = request.body.id;
 
-  // mark as handed over
-  request.body.forEach(jobid => {
-    if (encounteredError) return;
-
-    database.query(
-      `UPDATE jobs SET is_handed_over=true WHERE id=${jobid}`,
-      error => {
-        if (error) {
-          loggify.error(error);
-          encounteredError = true;
-          return response.sendStatus(500);
-        }
-
-        if (counter === request.body.length) {
-          return response.json({
-            message: Strings.SUCCESS.JOBS_HANDED_OVER
-          });
-        }
-
-        return counter++;
+  // Update fields
+  database.query(
+    `UPDATE jobs SET amount_received=${amountReceived}, payment_mode=${paymentMode}, payment_mode_details=${paymentModeDetails}, is_handed_over=${true} WHERE id=${jobId}`,
+    error => {
+      if (error) {
+        loggify.error(error);
+        return response.sendStatus(500);
       }
-    );
-  });
+      return response.json({
+        message: Strings.SUCCESS.JOBS_HANDED_OVER
+      });
+    }
+  );
 };
 
 // Exports
