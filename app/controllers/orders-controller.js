@@ -180,10 +180,11 @@ let createOrder = (request, response) => {
     `"${body.owner}"`,
     `"${body.party}"`,
     body.is_designing,
-    body.is_scanning
+    body.is_scanning,
+    Date.now()
   ];
   database.query(
-    `INSERT INTO orders (name, description, owner, party, is_designing, is_scanning) VALUES (${dbValues})`,
+    `INSERT INTO orders (name, description, owner, party, is_designing, is_scanning, created_on) VALUES (${dbValues})`,
     error => {
       if (error) {
         loggify.error(error);
