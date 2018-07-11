@@ -28,9 +28,11 @@ let getAllOrders = (request, response) => {
          SELECT * FROM parties WHERE id=${order.party};
          SELECT * FROM order_statuses WHERE id=${order.status};
          SELECT * FROM jobs WHERE order_id=${order.id};
+         SELECT * FROM payments WHERE order_id=${order.id};
+         SELECT * FROM files WHERE order_id=${order.id};
          SELECT * FROM orders
          `,
-        [0, 1, 2, 3, 4],
+        [0, 1, 2, 3, 4, 5, 6],
         (error, result) => {
           if (error) {
             loggify.error(error);
@@ -42,6 +44,8 @@ let getAllOrders = (request, response) => {
           order.party = result[1][0];
           order.status = result[2][0];
           order.jobs = result[3];
+          order.payments = result[4];
+          order.files = result[5];
           order.isHighPriority = false;
 
           // Set High Priority Flag
@@ -58,7 +62,7 @@ let getAllOrders = (request, response) => {
 
           // Calculate charges for jobs
           order.jobs.forEach(job => {
-            result[4].forEach(charge => {
+            result[6].forEach(charge => {
               if (
                 charge.job_feature == job.feature &&
                 charge.job_quality == job.quality &&
@@ -98,10 +102,11 @@ let getOrderById = (request, response) => {
           SELECT * FROM parties WHERE id=${order.party};
           SELECT * FROM order_statuses WHERE id=${order.status};
           SELECT * FROM jobs WHERE order_id=${order.id};
+          SELECT * FROM payments WHERE order_id=${order.id};
           SELECT * FROM files WHERE order_id=${order.id};
           SELECT * FROM charges
         `,
-          [0, 1, 2, 3, 4, 5],
+          [0, 1, 2, 3, 4, 5, 6],
           (error, result) => {
             if (error) {
               loggify.error(error);
@@ -113,7 +118,8 @@ let getOrderById = (request, response) => {
             order.party = result[1][0];
             order.status = result[2][0];
             order.jobs = result[3];
-            order.files = result[4];
+            order.payments = result[4];
+            order.files = result[5];
             order.isHighPriority = false;
 
             // Set High Priority Flag
@@ -138,7 +144,7 @@ let getOrderById = (request, response) => {
 
             // Calculate charges for jobs
             order.jobs.forEach(job => {
-              result[5].forEach(charge => {
+              result[6].forEach(charge => {
                 if (
                   charge.job_feature == job.feature &&
                   charge.job_quality == job.quality &&
@@ -660,7 +666,7 @@ const handoverJobs = (request, response) => {
 
   // Update fields
   database.query(
-    `INSERT INTO payments (orderid, jobid, amount, paid_on, payment_mode, payment_mode_details) VALUES (${orderId},${jobId}, ${amountReceived}, ${paidOn}, ${paymentMode}, ${paymentModeDetails})`,
+    `INSERT INTO payments (order_id, job_id, amount, paid_on, payment_mode, payment_mode_details) VALUES (${orderId},${jobId}, ${amountReceived}, ${paidOn}, ${paymentMode}, ${paymentModeDetails})`,
     error => {
       if (error) {
         loggify.error(error);
@@ -700,7 +706,7 @@ const acceptPayments = (request, response) => {
 
   // Query
   database.query(
-    `INSERT INTO payments (orderid, jobid, amount) VALUES (${orderId}, ${jobId}, ${amount})`,
+    `INSERT INTO payments (order_id, job_id, amount) VALUES (${orderId}, ${jobId}, ${amount})`,
     error => {
       if (error) {
         loggify.error(error);
