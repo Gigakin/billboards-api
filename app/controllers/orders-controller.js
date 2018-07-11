@@ -387,7 +387,11 @@ let setJobAdvanceAmounts = (request, response) => {
 
   // Create data model
   let jobsArray = request.body.map(job => {
-    return { advance: job.advance, id: job.id, rate: job.rate.charge };
+    return {
+      id: job.id,
+      advance: Math.ceil(job.advance),
+      rate: job.rate.charge
+    };
   });
 
   // Save Rate to db
@@ -650,7 +654,7 @@ const handoverJobs = (request, response) => {
   let orderId = request.params.id;
   let paymentMode = `"${request.body.payment_mode}"`;
   let paymentModeDetails = `"${request.body.payment_mode_details}"`;
-  let amountReceived = parseFloat(request.body.amount_received);
+  let amountReceived = Math.ceil(request.body.amount_received);
   let paidOn = `"${moment(Date.now())}"`;
   let jobId = request.body.id;
 
@@ -690,14 +694,13 @@ const acceptPayments = (request, response) => {
   }
 
   // Variables
-  let amount = request.body.advance;
+  let amount = Math.ceil(request.body.advance);
   let orderId = request.params.orderid;
   let jobId = request.params.jobid;
 
   // Query
   database.query(
     `INSERT INTO payments (orderid, jobid, amount) VALUES (${orderId}, ${jobId}, ${amount})`,
-    // `UPDATE jobs SET advance=${request.body.advance} WHERE id=${jobId}`,
     error => {
       if (error) {
         loggify.error(error);
