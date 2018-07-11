@@ -647,22 +647,35 @@ const handoverJobs = (request, response) => {
     });
   }
 
+  let orderId = request.params.id;
   let paymentMode = `"${request.body.payment_mode}"`;
   let paymentModeDetails = `"${request.body.payment_mode_details}"`;
   let amountReceived = parseFloat(request.body.amount_received);
+  let paidOn = `"${moment(Date.now())}"`;
   let jobId = request.body.id;
 
   // Update fields
   database.query(
-    `UPDATE jobs SET amount_received=${amountReceived}, payment_mode=${paymentMode}, payment_mode_details=${paymentModeDetails}, is_handed_over=${true} WHERE id=${jobId}`,
+    `INSERT INTO payments (orderid, jobid, amount, paid_on, payment_mode, payment_mode_details) VALUES (${orderId},${jobId}, ${amountReceived}, ${paidOn}, ${paymentMode}, ${paymentModeDetails})`,
     error => {
       if (error) {
         loggify.error(error);
         return response.sendStatus(500);
       }
-      return response.json({
-        message: Strings.SUCCESS.JOBS_HANDED_OVER
-      });
+
+      // Update handover status
+      database.query(
+        `UPDATE jobs SET is_handed_over=${true} WHERE id=${jobId}`,
+        error => {
+          if (error) {
+            loggify.error(error);
+            return response.sendStatus(500);
+          }
+          return response.json({
+            message: Strings.SUCCESS.JOBS_HANDED_OVER
+          });
+        }
+      );
     }
   );
 };
@@ -677,17 +690,22 @@ const acceptPayments = (request, response) => {
   }
 
   // Variables
+  let amount = request.body.advance;
+  let orderId = request.params.orderid;
   let jobId = request.params.jobid;
 
   // Query
   database.query(
-    `UPDATE jobs SET advance=${request.body.advance} WHERE id=${jobId}`,
+    `INSERT INTO payments (orderid, jobid, amount) VALUES (${orderId}, ${jobId}, ${amount})`,
+    // `UPDATE jobs SET advance=${request.body.advance} WHERE id=${jobId}`,
     error => {
       if (error) {
         loggify.error(error);
         return response.sendStatus(500);
       }
-      return response.json({ message: Strings.SUCCESS.PAYMENT_ACCEPTED });
+      return response.json({
+        message: Strings.SUCCESS.PAYMENT_ACCEPTED
+      });
     }
   );
 };
