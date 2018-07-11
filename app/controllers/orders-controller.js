@@ -1,5 +1,6 @@
 // Modules
 const loggify = require("agx-loggify");
+const moment = require("moment");
 
 // Imports
 const Strings = require("../strings");
@@ -181,7 +182,7 @@ let createOrder = (request, response) => {
     `"${body.party}"`,
     body.is_designing,
     body.is_scanning,
-    Date.now()
+    `"${moment(Date.now())}"`
   ];
   database.query(
     `INSERT INTO orders (name, description, owner, party, is_designing, is_scanning, created_on) VALUES (${dbValues})`,
@@ -389,13 +390,29 @@ let setJobAdvanceAmounts = (request, response) => {
     return { advance: job.advance, id: job.id, rate: job.rate.charge };
   });
 
-  // Save advance amounts to database
+  // Save Rate to db
   let counter = 0;
   jobsArray.forEach((job, index) => {
     database.query(
-      `UPDATE jobs SET advance=${job.advance}, rate=${job.rate} WHERE id = ${
+      `UPDATE jobs SET rate=${job.rate} WHERE id=${job.id}`,
+      error => {
+        if (error) {
+          loggify.error(error);
+          return response.sendStatus(500);
+        }
+        if (counter === index) return;
+        counter++;
+      }
+    );
+  });
+
+  // Save payment to database
+  counter = 0;
+  jobsArray.forEach((job, index) => {
+    database.query(
+      `INSERT INTO payments (amount, jobid, paid_on) VALUES (${job.advance}, ${
         job.id
-      }`,
+      }, "${moment(Date.now())}")`,
       error => {
         if (error) {
           loggify.error(error);
