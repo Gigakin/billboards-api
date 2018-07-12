@@ -430,7 +430,7 @@ let setJobAdvanceAmounts = (request, response) => {
           loggify.error(error);
           return response.sendStatus(500);
         }
-        if (counter === jobsArray.length) {
+        if (counter === index) {
           return response.json({
             message: Strings.SUCCESS.ADVANCE_AMOUNT_CAPTURED
           });
@@ -695,28 +695,40 @@ const handoverJobs = (request, response) => {
 // Accept Payments
 const acceptPayments = (request, response) => {
   // Validate
-  if (!request.body || !request.body.advance) {
+  if (!request.body || !request.body.amount_received) {
     return response.status(400).json({
       message: Strings.ERRORS.MISSING_REQUIRED_FIELDS
     });
   }
 
   // Variables
-  let amount = Math.ceil(request.body.advance);
   let orderId = request.params.orderid;
+  let amount = Math.ceil(request.body.amount_received);
   let jobId = request.params.jobid;
 
   // Query
   database.query(
-    `INSERT INTO payments (order_id, job_id, amount) VALUES (${orderId}, ${jobId}, ${amount})`,
+    `INSERT INTO payments (order_id, job_id, amount, paid_on) VALUES (${orderId}, ${jobId}, ${amount}, "${moment(
+      Date.now()
+    )}")`,
     error => {
       if (error) {
         loggify.error(error);
         return response.sendStatus(500);
       }
-      return response.json({
-        message: Strings.SUCCESS.PAYMENT_ACCEPTED
-      });
+      // Mark job as paid
+      database.query(
+        `UPDATE jobs SET is_paid=${true} WHERE id=${jobId}`,
+        error => {
+          if (error) {
+            loggify.error(error);
+            return response.sendStatus(500);
+          }
+          return response.json({
+            message: Strings.SUCCESS.PAYMENT_ACCEPTED
+          });
+        }
+      );
     }
   );
 };
