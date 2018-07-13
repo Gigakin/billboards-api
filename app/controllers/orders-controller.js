@@ -418,9 +418,8 @@ let setJobAdvanceAmounts = (request, response) => {
   });
 
   // Save payment to database
-  counter = 0;
-  console.log(counter);
-  jobsArray.forEach((job, index) => {
+  let jobsCounter = 1;
+  jobsArray.forEach(job => {
     database.query(
       `INSERT INTO payments (order_id, job_id, amount, paid_on) VALUES (${
         job.orderId
@@ -430,12 +429,12 @@ let setJobAdvanceAmounts = (request, response) => {
           loggify.error(error);
           return response.sendStatus(500);
         }
-        if (counter === index) {
+        if (jobsCounter === jobsArray.length) {
           return response.json({
             message: Strings.SUCCESS.ADVANCE_AMOUNT_CAPTURED
           });
         }
-        counter++;
+        jobsCounter++;
       }
     );
   });
