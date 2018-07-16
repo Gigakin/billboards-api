@@ -1,7 +1,6 @@
 // Modules
 const express = require("express");
 const bodyParser = require("body-parser");
-const sqlinjection = require("sql-injection");
 const loggify = require("agx-loggify");
 const multer = require("multer");
 const path = require("path");
@@ -15,9 +14,6 @@ const constants = require("./app/constants");
 
 // Initialize Logger
 loggify.start("logs", ".txt");
-
-// Prevent SQL Injection
-app.use(sqlinjection);
 
 // CORS Configuration
 const cors = require("./app/cors");

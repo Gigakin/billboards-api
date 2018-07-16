@@ -492,7 +492,10 @@ let saveCustomerFile = (request, response) => {
       } else {
         // Save in Database
         database.query(
-          `INSERT INTO files (name, location, job, order_id, type) VALUES (${values})`,
+          `
+          INSERT INTO files (name, location, job, order_id, type) VALUES (${values}); 
+          UPDATE jobs SET hasCustomerFile=${true} WHERE id=${jobId}
+          `,
           error => {
             if (error) {
               loggify.error(error);
@@ -560,7 +563,8 @@ let saveDesignerFile = (request, response) => {
       } else {
         // Save in Database
         database.query(
-          `INSERT INTO files (name, location, job, order_id, type) VALUES (${values})`,
+          `INSERT INTO files (name, location, job, order_id, type) VALUES (${values}); 
+          UPDATE jobs SET hasDesignFile=${true} WHERE id=${jobId}`,
           error => {
             if (error) {
               loggify.error(error);
@@ -628,7 +632,8 @@ let savePrinterFile = (request, response) => {
       } else {
         // Save in Database
         database.query(
-          `INSERT INTO files (name, location, job, order_id, type) VALUES (${values})`,
+          `INSERT INTO files (name, location, job, order_id, type) VALUES (${values}); 
+          UPDATE jobs SET hasPrintFile=${true} WHERE id=${jobId}`,
           error => {
             if (error) {
               loggify.error(error);
