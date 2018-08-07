@@ -47,6 +47,13 @@ let login = (request, response) => {
           { expiresIn: 3600 * 24 }
         );
 
+        // Update User Status
+        database.query(
+          `UPDATE users SET is_logged_in = true WHERE id="${users[0].id}"`,
+          // No need for a 500 error here
+          error => (error ? loggify.error(error) : null)
+        );
+
         // Get User Role
         database.query(
           `SELECT * FROM user_roles WHERE id="${users[0].role}"`,
@@ -81,6 +88,9 @@ let login = (request, response) => {
     }
   );
 };
+
+// Logout
+let logout = (request, response) => {};
 
 // Exports
 module.exports = {
